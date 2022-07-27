@@ -33,18 +33,36 @@ function playRound(playerSelection, computerSelection) {
 
 // Simulates the entire game with all 5 rounds between the user and computer
 function game() {
-    const playOptions = ['rock','paper','scissors'];
+    const btns = document.querySelectorAll('button');
+    const resultDiv = document.querySelector('div');
+    const roundMsg = document.createElement('p');
+    const runningScore = document.createElement('p');
+    const gameWinner = document.createElement('p');
+    let userScore = 0;
+    let computerScore = 0;
+    btns.forEach(btn => btn.addEventListener('click', () => {
+        roundMsg.textContent = playRound(btn.textContent, computerPlay());
+        resultDiv.appendChild(roundMsg);
 
-    for(let i=0; i < 5; i++) {
-        let userPlay = prompt('Choose: Rock, Paper, or Scissors');      // ask user for their play selection
-        if(userPlay === playOptions[0].toLowerCase() || userPlay === playOptions[1].toLowerCase() || userPlay === playOptions[2].toLowerCase()) {
-            alert('Round ' + (i+1) + ': ' + playRound(userPlay, computerPlay()));       // if the user's input matches an element from playOptions, then call playRound(user play, computer play)
-        }                                                                              
-        else {
-            alert('Invalid Input, Try Again');      // else print an error
-            i--;                                    // decrement i so the round doesn't advance until a valid input is given
+        if(roundMsg.textContent.includes('Win'))
+            userScore++;
+        else if(roundMsg.textContent.includes('Lose'))
+            computerScore++;
+        
+        runningScore.textContent = `Your Score: ${userScore}\nComputer Score: ${computerScore}`;
+        resultDiv.appendChild(runningScore);
+
+        gameWinner.textContent = "";
+        if(userScore == 5) {
+            gameWinner.textContent = "Users Wins!";
+            userScore = computerScore = 0;
         }
-    }
+        else if(computerScore == 5) {
+            gameWinner.textContent = "Computer Wins!";
+            userScore = computerScore = 0;
+        }
+        resultDiv.appendChild(gameWinner);
+    }));
 }
 
 game();
